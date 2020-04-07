@@ -29,13 +29,30 @@ const keyCode = ['Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 
   'ControlLeft', 'MetaLeft', 'AltLeft', 'Space', 'AltRight', 'MetaRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ControlRight',
 ];
 
-let button = document.getElementById('button_for_l_change');
-console.log(button)
+let chosen_language = 'en';
 
-button.addEventListener('click', () => {
-  createmain(keyLayoutru);
-});
+function do_the_magic(language) {
+  console.log(language);
+  if (language === 'en'){
+    createmain(keyLayout)
+  }
+  else{
+    createmain(keyLayoutru)
+  }
+}
 
+function change_language() {
+  if (chosen_language === 'ru'){
+    do_the_magic(chosen_language)
+    chosen_language = 'en';
+    // localStorage.setItem('chosen_language', 'ru')
+  }
+  else if(chosen_language = 'en'){
+    do_the_magic(chosen_language)
+    chosen_language = 'ru';
+    // localStorage.setItem('chosen_language', 'en')
+  }
+}
 
 function createmain(arr) {
   document.body.innerText = '';
@@ -48,13 +65,13 @@ function createmain(arr) {
   mainwrapper.classList.add('mainback');
   document.body.append(mainwrapper);
 
-  let button = document.createElement('button');
-  button.innerText = 'Кликни на меня';
-  mainwrapper.append(button);
+  // let button = document.createElement('button');
+  // button.innerText = 'Кликни на меня';
+  // mainwrapper.append(button);
   
-  button.addEventListener('click', () => {
-    createmain(keyLayoutru);
-  });
+  // button.addEventListener('click', () => {
+  //   createmain(keyLayoutru);
+  // });
 
   const row = document.createElement('div');
   row.classList.add('row');
@@ -141,4 +158,32 @@ function createmain(arr) {
   });
 }
 
-createmain(keyLayout);
+function runOnKeys( ...codes) {
+  let pressed = new Set();
+
+  document.addEventListener('keydown', function(event) {
+    pressed.add(event.code);
+
+    for (let code of codes) { // все ли клавиши из набора нажаты?
+      if (!pressed.has(code)) {
+        return;
+      }
+    }
+
+    pressed.clear();
+
+    change_language();
+  });
+
+  document.addEventListener('keyup', function(event) {
+    pressed.delete(event.code);
+  });
+
+}
+
+runOnKeys(
+  "ShiftLeft",
+  "ControlLeft"
+);
+// let language_from_local = localStorage.getItem('chosen_language');
+do_the_magic(chosen_language);
