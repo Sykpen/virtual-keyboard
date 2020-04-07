@@ -3,7 +3,23 @@
     margin: 0 auto;
     background-color: rgba(243, 184, 135, 0.479);
     height: 310px;
+}
 
+.back_for_language_change{
+    width: 920px;
+    margin: 0 auto;
+    background-color: rgba(243, 184, 135, 0.479);
+    height: 210px;
+    text-align: center;
+}
+
+.text{
+    font-size: 40px;
+}
+
+.button{
+    width: 150px;
+    height: 50px;
 }
 .row{
     display: flex;

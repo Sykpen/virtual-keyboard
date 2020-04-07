@@ -30,6 +30,7 @@ const keyCode = ['Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 
 ];
 
 let chosen_language = 'en';
+let language_from_local = localStorage.getItem('chosen_language');
 
 function do_the_magic(language) {
   console.log(language);
@@ -45,12 +46,12 @@ function change_language() {
   if (chosen_language === 'ru'){
     do_the_magic(chosen_language)
     chosen_language = 'en';
-    // localStorage.setItem('chosen_language', 'ru')
+    localStorage.setItem('chosen_language', 'ru')
   }
   else if(chosen_language = 'en'){
     do_the_magic(chosen_language)
     chosen_language = 'ru';
-    // localStorage.setItem('chosen_language', 'en')
+    localStorage.setItem('chosen_language', 'en')
   }
 }
 
@@ -61,17 +62,29 @@ function createmain(arr) {
   writingarea.classList.add('writingarea');
   document.body.append(writingarea);
 
+  writingarea.innerText = localStorage.getItem('textarea');
+
   const mainwrapper = document.createElement('div');
   mainwrapper.classList.add('mainback');
   document.body.append(mainwrapper);
 
-  // let button = document.createElement('button');
-  // button.innerText = 'Кликни на меня';
-  // mainwrapper.append(button);
+  let back_for_language_change = document.createElement('div');
+  back_for_language_change.classList.add('back_for_language_change');
+  document.body.append(back_for_language_change);
+
+  let text = document.createElement('p');
+  text.classList.add('text');
+  text.innerText = 'Для смены языка нажмите комбинацию ShiftLeft + ControlLeft, или нажмите на кнопку';
+  back_for_language_change.append(text);
+
+  let button = document.createElement('button');
+  button.classList.add('button')
+  button.innerText = 'Поменять язык';
+  back_for_language_change.append(button);
   
-  // button.addEventListener('click', () => {
-  //   createmain(keyLayoutru);
-  // });
+  button.addEventListener('click', () => {
+    change_language();
+  });
 
   const row = document.createElement('div');
   row.classList.add('row');
@@ -113,6 +126,7 @@ function createmain(arr) {
   });
 
   row.addEventListener('mousedown', (event) => {
+    localStorage.setItem('textarea', writingarea.value)
     const target = event.target.closest('div');
     if (target.className === 'row') return;
 
@@ -136,6 +150,7 @@ function createmain(arr) {
     }
   });
   row.addEventListener('mouseup', (event) => {
+    localStorage.setItem('textarea', writingarea.value)
     const target = event.target.closest('div');
     if (target.className === 'row') return;
     target.classList.remove('selected');
@@ -143,6 +158,7 @@ function createmain(arr) {
   });
 
   document.addEventListener('keydown', (event) => {
+    localStorage.setItem('textarea', writingarea.value)
     writingarea.focus();
     const { code } = event;
     const codeClass = document.querySelector(`.${code}`);
@@ -152,6 +168,7 @@ function createmain(arr) {
   });
 
   document.addEventListener('keyup', (event) => {
+    localStorage.setItem('textarea', writingarea.value)
     const { code } = event;
     const codeClass = document.querySelector(`.${code}`);
     codeClass.classList.remove('selected');
@@ -164,7 +181,7 @@ function runOnKeys( ...codes) {
   document.addEventListener('keydown', function(event) {
     pressed.add(event.code);
 
-    for (let code of codes) { // все ли клавиши из набора нажаты?
+    for (let code of codes) {
       if (!pressed.has(code)) {
         return;
       }
@@ -185,5 +202,5 @@ runOnKeys(
   "ShiftLeft",
   "ControlLeft"
 );
-// let language_from_local = localStorage.getItem('chosen_language');
+
 do_the_magic(chosen_language);
